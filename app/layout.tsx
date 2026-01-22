@@ -15,20 +15,11 @@ export const metadata: Metadata = {
     locale: 'es_MX',
     type: 'website',
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  icons: {
-    icon: '/logo.png',
-  },
+  robots: { index: true, follow: true },
+  icons: { icon: '/logo.png' },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className="scroll-smooth">
       <head>
@@ -36,7 +27,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="bg-[#030303] text-white antialiased overflow-x-hidden">
-        <div className="noise-overlay" aria-hidden="true" />
         {children}
       </body>
     </html>

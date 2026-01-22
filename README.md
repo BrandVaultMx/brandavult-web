@@ -1,186 +1,91 @@
-# BrandVault.mx - Landing Premium
+# BrandVault.mx - Landing Ultra Premium v3.0
 
-Plataforma de protección de marcas en México con sistema de reportes dinámicos para campañas de cold email.
+Landing page premium con animaciones avanzadas, cursor tracking, parallax y efectos nivel Silicon Valley.
 
-## 🚀 Stack Tecnológico
+## 🚀 Stack
 
-- **Framework:** Next.js 14 (App Router)
-- **Animaciones:** Framer Motion
-- **Estilos:** Tailwind CSS
-- **Deploy:** Vercel
-- **TypeScript:** Tipado estricto
+- **Next.js 14** (App Router)
+- **Framer Motion** (Animaciones)
+- **Tailwind CSS** (Estilos)
+- **TypeScript** (Tipado)
 
-## 📁 Estructura del Proyecto
+## ✨ Características Premium
+
+- ✅ Cursor glow effect (sigue el mouse)
+- ✅ Scroll progress indicator
+- ✅ Loading screen animado
+- ✅ Parallax en hero
+- ✅ Counters animados
+- ✅ Magnetic buttons
+- ✅ Staggered reveal animations
+- ✅ Floating WhatsApp button
+- ✅ 4 redes sociales (IG, LinkedIn, X, FB)
+- ✅ Noise texture overlay
+- ✅ FAQ acordeón animado
+- ✅ Reportes dinámicos para cold email
+
+## 📁 Estructura
 
 ```
-brandvault-premium/
+brandvault-ultra/
 ├── app/
-│   ├── globals.css          # Estilos globales premium
-│   ├── layout.tsx           # Layout con metadata SEO
-│   ├── page.tsx             # Landing principal
-│   └── marca/[expediente]/
-│       ├── page.tsx         # Reportes dinámicos
-│       └── not-found.tsx    # 404 elegante
-├── components/
-│   └── animations.tsx       # Componentes de animación
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── page.tsx              # Landing principal
+│   └── marca/[expediente]/   # Reportes dinámicos
 ├── data/
-│   └── leads.ts             # Datos de leads
+│   └── leads.ts              # Datos de leads
 ├── scripts/
-│   └── csv-to-ts.js         # Convertidor CSV → TypeScript
+│   └── csv-to-ts.js          # Convertidor CSV
 ├── public/
-│   └── logo.png             # Logo (agregar)
+│   └── logo.png              # Agregar tu logo
 ├── package.json
 ├── tailwind.config.js
-├── tsconfig.json
-└── next.config.js
+└── tsconfig.json
 ```
 
 ## 🛠️ Instalación
 
-### 1. Descomprimir y preparar
-
-```bash
-# Descomprime el ZIP en tu carpeta de proyectos
-# Abre en tu editor (VS Code, Cursor)
-```
-
-### 2. Instalar dependencias
-
 ```bash
 npm install
-```
-
-### 3. Ejecutar en desarrollo
-
-```bash
 npm run dev
 ```
 
-Abre http://localhost:3000
+## 📤 Deploy
 
-## 📤 Deploy a Vercel
+1. Push a GitHub
+2. Importar en Vercel
+3. **Framework Preset: Next.js** (¡importante!)
+4. Deploy
 
-### Opción A: GitHub + Vercel (Recomendado)
+## 🔗 Actualizar Links
 
-1. **Sube a GitHub:**
-```bash
-git init
-git add .
-git commit -m "Landing premium BrandVault"
-git remote add origin https://github.com/tu-usuario/brandvault-web.git
-git push -u origin main
-```
-
-2. **En Vercel:**
-   - Importa el repositorio
-   - Framework Preset: **Next.js** (¡importante!)
-   - Deploy
-
-### Opción B: Vercel CLI
-
-```bash
-npm i -g vercel
-vercel
-```
-
-## 🔄 Actualizar Leads
-
-Cuando tengas nuevos leads del scraper:
-
-1. **Coloca el CSV** en la raíz del proyecto:
-```
-brandvault-premium/
-└── leads.csv    ← aquí
-```
-
-2. **Ejecuta el script:**
-```bash
-node scripts/csv-to-ts.js
-```
-
-3. **Haz deploy:**
-```bash
-git add .
-git commit -m "Actualizar leads"
-git push
-```
-
-Vercel detectará el cambio y hará deploy automático.
-
-## 📊 Formato del CSV
-
-El CSV del scraper debe tener estas columnas:
-
-```csv
-expediente,marca,titular,fecha_registro,fecha_limite,dias_restantes,score
-1802681,REYMA MARIEL,VICENTE REYES,2023-01-04,2026-04-04,73,85
-```
-
-## 🎨 Personalización
-
-### Colores (tailwind.config.js)
+Edita `SOCIAL_LINKS` al inicio de `app/page.tsx`:
 
 ```js
-colors: {
-  gold: {
-    400: '#D4AF37',  // Dorado principal
-    500: '#B8962E',  // Dorado oscuro
-  },
-  vault: {
-    black: '#030303',  // Negro profundo
-    dark: '#0A0A0A',   // Negro suave
-  }
+const SOCIAL_LINKS = {
+  whatsapp: 'https://wa.me/522294641516',
+  instagram: 'https://www.instagram.com/brandvaultmx/',
+  linkedin: 'https://linkedin.com/company/brandvaultmx',
+  twitter: 'https://x.com/brandvaultmx',
+  facebook: 'https://facebook.com/brandvaultmx',
+  email: 'contacto@brandvault.mx',
+  mercadopago: 'https://mpago.la/2jfXZ5W',
+  calendly: 'https://calendly.com/brandvault/15min',
 }
 ```
 
-### Links importantes
+## 📊 Actualizar Leads
 
-En `app/page.tsx` actualiza:
+1. Coloca `leads.csv` en la raíz
+2. Ejecuta: `node scripts/csv-to-ts.js`
+3. Push y deploy
 
-- **WhatsApp:** `522294641516`
-- **Mercado Pago:** `https://mpago.la/2jfXZ5W`
-- **Calendly:** `https://calendly.com/brandvault/15min`
-- **Instagram:** `@brandvault.mx`
+## 🎨 Colores
 
-## ✅ Checklist Pre-Launch
-
-- [ ] Logo en `/public/logo.png`
-- [ ] Verificar links de WhatsApp
-- [ ] Verificar link de Mercado Pago
-- [ ] Verificar link de Calendly
-- [ ] Actualizar datos de leads
-- [ ] Probar en móvil
-- [ ] Verificar Framework Preset = Next.js en Vercel
-
-## 🐛 Troubleshooting
-
-### Error 404 después de deploy
-
-1. Ve a Vercel → Project → Settings → General
-2. Verifica que **Framework Preset** sea "Next.js"
-3. Haz Redeploy sin caché
-
-### Animaciones no funcionan
-
-Verifica que Framer Motion está instalado:
-```bash
-npm install framer-motion
-```
-
-### Build falla
-
-```bash
-# Limpia caché
-rm -rf .next node_modules
-npm install
-npm run build
-```
-
-## 📞 Soporte
-
-- **Email:** contacto@brandvault.mx
-- **WhatsApp:** +52 229 464 1516
+- Gold: `#D4AF37`
+- Black: `#030303`
 
 ---
 
-Construido con ❤️ para BrandVault.mx
+Construido para BrandVault.mx 🏆
