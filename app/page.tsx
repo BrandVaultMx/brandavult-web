@@ -358,7 +358,7 @@ function HeroSection() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-gold-400" />
             </span>
             <span className="text-xs tracking-[0.15em] text-gold-400 uppercase">
-              <CountUp target={147} suffix="+" /> marcas protegidas este mes
+              +1,200 marcas en riesgo de cancelación este trimestre
             </span>
           </motion.div>
         </FadeIn>
@@ -669,7 +669,9 @@ function Footer() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center">
         <FadeIn><span className="text-xs tracking-[0.3em] text-white/30 uppercase">Canal de Consultoría</span></FadeIn>
         <FadeIn delay={0.15}>
-          <a href={`mailto:${SOCIAL_LINKS.email}`} className="block font-serif text-3xl sm:text-4xl lg:text-5xl mt-6 text-white hover:text-gold-400 transition-colors">
+          <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${SOCIAL_LINKS.email}&su=${encodeURIComponent('Consulta sobre protección de marca')}`} 
+           target="_blank" rel="noopener noreferrer"
+           className="block font-serif text-3xl sm:text-4xl lg:text-5xl mt-6 text-white hover:text-gold-400 transition-colors">
             {SOCIAL_LINKS.email}
           </a>
         </FadeIn>
