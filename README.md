@@ -1,134 +1,186 @@
-# BrandVault.mx - Sitio Web Oficial
+# BrandVault.mx - Landing Premium
 
 Plataforma de protección de marcas en México con sistema de reportes dinámicos para campañas de cold email.
 
-## Stack
+## 🚀 Stack Tecnológico
 
 - **Framework:** Next.js 14 (App Router)
-- **Styling:** Tailwind CSS
-- **Hosting:** Vercel
-- **TypeScript:** Sí
+- **Animaciones:** Framer Motion
+- **Estilos:** Tailwind CSS
+- **Deploy:** Vercel
+- **TypeScript:** Tipado estricto
 
-## Estructura
+## 📁 Estructura del Proyecto
 
 ```
-brandvault-site/
+brandvault-premium/
 ├── app/
-│   ├── globals.css         # Estilos globales
-│   ├── layout.tsx          # Layout principal
-│   ├── page.tsx            # Landing page (/)
-│   └── marca/
-│       └── [expediente]/
-│           ├── page.tsx    # Página de reporte (/marca/1802681)
-│           └── not-found.tsx
+│   ├── globals.css          # Estilos globales premium
+│   ├── layout.tsx           # Layout con metadata SEO
+│   ├── page.tsx             # Landing principal
+│   └── marca/[expediente]/
+│       ├── page.tsx         # Reportes dinámicos
+│       └── not-found.tsx    # 404 elegante
+├── components/
+│   └── animations.tsx       # Componentes de animación
 ├── data/
-│   └── leads.ts            # Datos del scraper
+│   └── leads.ts             # Datos de leads
+├── scripts/
+│   └── csv-to-ts.js         # Convertidor CSV → TypeScript
 ├── public/
-│   └── logo.png            # Logo del león
+│   └── logo.png             # Logo (agregar)
 ├── package.json
 ├── tailwind.config.js
+├── tsconfig.json
 └── next.config.js
 ```
 
-## Instalación Local
+## 🛠️ Instalación
+
+### 1. Descomprimir y preparar
 
 ```bash
-# 1. Instalar dependencias
-npm install
-
-# 2. Copiar tu logo.png a /public/logo.png
-
-# 3. Ejecutar en desarrollo
-npm run dev
-
-# 4. Abrir http://localhost:3000
+# Descomprime el ZIP en tu carpeta de proyectos
+# Abre en tu editor (VS Code, Cursor)
 ```
 
-## Deploy a Vercel
+### 2. Instalar dependencias
 
-### Opción A: Desde GitHub (Recomendado)
+```bash
+npm install
+```
 
-1. Sube este código a tu repo de GitHub (brandvault.mx)
-2. Ve a [vercel.com](https://vercel.com)
-3. Importa el proyecto desde GitHub
-4. Vercel detecta Next.js automáticamente
-5. Click "Deploy"
+### 3. Ejecutar en desarrollo
 
-### Opción B: Reemplazar código existente
+```bash
+npm run dev
+```
 
-1. Borra todo el contenido de tu repo actual
-2. Copia todos estos archivos
-3. Commit y push a GitHub
-4. Vercel re-desplegará automáticamente
+Abre http://localhost:3000
 
-## URLs
+## 📤 Deploy a Vercel
 
-- **Landing:** `brandvault.mx`
-- **Reportes:** `brandvault.mx/marca/[expediente]`
+### Opción A: GitHub + Vercel (Recomendado)
 
-Ejemplos:
-- https://brandvault.mx/marca/1802681 → REYMA MARIEL
-- https://brandvault.mx/marca/1327583 → CONEXION DF
+1. **Sube a GitHub:**
+```bash
+git init
+git add .
+git commit -m "Landing premium BrandVault"
+git remote add origin https://github.com/tu-usuario/brandvault-web.git
+git push -u origin main
+```
 
-## Actualizar Leads
+2. **En Vercel:**
+   - Importa el repositorio
+   - Framework Preset: **Next.js** (¡importante!)
+   - Deploy
 
-Cuando corras el scraper con nuevos datos:
+### Opción B: Vercel CLI
 
-1. Genera el CSV con el scraper
-2. Convierte a TypeScript usando el script incluido
-3. Reemplaza el contenido de `data/leads.ts`
-4. Commit y push → Vercel re-despliega automáticamente
+```bash
+npm i -g vercel
+vercel
+```
 
-### Formato requerido en leads.ts
+## 🔄 Actualizar Leads
 
-```typescript
-export const leads: Record<string, Lead> = {
-  "EXPEDIENTE": {
-    expediente: "EXPEDIENTE",
-    marca: "NOMBRE MARCA",
-    titular: "TITULAR",
-    firstName: "NOMBRE",
-    fechaRegistro: "DD/MM/YYYY",
-    fechaLimite: "DD/MM/YYYY",
-    diasRestantes: 73,
-    score: 55,
-    urgencia: "IMPORTANTE"
+Cuando tengas nuevos leads del scraper:
+
+1. **Coloca el CSV** en la raíz del proyecto:
+```
+brandvault-premium/
+└── leads.csv    ← aquí
+```
+
+2. **Ejecuta el script:**
+```bash
+node scripts/csv-to-ts.js
+```
+
+3. **Haz deploy:**
+```bash
+git add .
+git commit -m "Actualizar leads"
+git push
+```
+
+Vercel detectará el cambio y hará deploy automático.
+
+## 📊 Formato del CSV
+
+El CSV del scraper debe tener estas columnas:
+
+```csv
+expediente,marca,titular,fecha_registro,fecha_limite,dias_restantes,score
+1802681,REYMA MARIEL,VICENTE REYES,2023-01-04,2026-04-04,73,85
+```
+
+## 🎨 Personalización
+
+### Colores (tailwind.config.js)
+
+```js
+colors: {
+  gold: {
+    400: '#D4AF37',  // Dorado principal
+    500: '#B8962E',  // Dorado oscuro
   },
-  // ... más leads
+  vault: {
+    black: '#030303',  // Negro profundo
+    dark: '#0A0A0A',   // Negro suave
+  }
 }
 ```
 
-## Secuencia de Emails
+### Links importantes
 
-Los emails de Instantly deben usar el link:
+En `app/page.tsx` actualiza:
 
+- **WhatsApp:** `522294641516`
+- **Mercado Pago:** `https://mpago.la/2jfXZ5W`
+- **Calendly:** `https://calendly.com/brandvault/15min`
+- **Instagram:** `@brandvault.mx`
+
+## ✅ Checklist Pre-Launch
+
+- [ ] Logo en `/public/logo.png`
+- [ ] Verificar links de WhatsApp
+- [ ] Verificar link de Mercado Pago
+- [ ] Verificar link de Calendly
+- [ ] Actualizar datos de leads
+- [ ] Probar en móvil
+- [ ] Verificar Framework Preset = Next.js en Vercel
+
+## 🐛 Troubleshooting
+
+### Error 404 después de deploy
+
+1. Ve a Vercel → Project → Settings → General
+2. Verifica que **Framework Preset** sea "Next.js"
+3. Haz Redeploy sin caché
+
+### Animaciones no funcionan
+
+Verifica que Framer Motion está instalado:
+```bash
+npm install framer-motion
 ```
-brandvault.mx/marca/{{expediente}}
+
+### Build falla
+
+```bash
+# Limpia caché
+rm -rf .next node_modules
+npm install
+npm run build
 ```
 
-Variables disponibles:
-- `{{expediente}}` - Número de expediente
-- `{{marca}}` - Nombre de la marca
-- `{{dias_restantes}}` - Días hasta vencimiento
-- `{{fecha_limite}}` - Fecha límite
+## 📞 Soporte
 
-## Personalización
+- **Email:** contacto@brandvault.mx
+- **WhatsApp:** +52 229 464 1516
 
-### Colores (tailwind.config.js)
-- `gold-400: #D4AF37` - Dorado principal
-- `vault-black: #050505` - Negro base
+---
 
-### WhatsApp/Calendly
-Editar en:
-- `app/page.tsx` - Landing principal
-- `app/marca/[expediente]/page.tsx` - Reportes
-
-### Logo
-Reemplazar `public/logo.png`
-
-## Notas
-
-- El sitio está optimizado para conversión
-- Los reportes se generan estáticamente (rápidos)
-- Tracking de analytics se puede agregar después
-- Compatible con mobile
+Construido con ❤️ para BrandVault.mx

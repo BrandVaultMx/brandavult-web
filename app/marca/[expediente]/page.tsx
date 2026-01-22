@@ -1,218 +1,282 @@
-import { leads, getLead } from '@/data/leads'
+import { leads, getLeadByExpediente, getAllExpedientes } from '@/data/leads'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
-// Generate static paths for all leads
+// Generar rutas estáticas
 export async function generateStaticParams() {
-  return Object.keys(leads).map((expediente) => ({
+  return getAllExpedientes().map((expediente) => ({
     expediente,
   }))
 }
 
-// Metadata for SEO
+// Metadata dinámica
 export async function generateMetadata({ params }: { params: { expediente: string } }) {
-  const lead = getLead(params.expediente)
+  const lead = getLeadByExpediente(params.expediente)
   
   if (!lead) {
-    return { title: 'Marca no encontrada | BrandVault' }
+    return { title: 'Reporte no encontrado | BrandVault' }
   }
   
   return {
-    title: `${lead.marca} - Reporte de Marca | BrandVault`,
-    description: `Diagnóstico de Declaración de Uso para ${lead.marca}. Fecha límite: ${lead.fechaLimite}`,
+    title: `${lead.marca} - Diagnóstico de Marca | BrandVault`,
+    description: `Reporte de declaración de uso para la marca ${lead.marca}. ${lead.diasRestantes} días restantes para cumplir con el Art. 233 LFPPI.`,
   }
 }
 
-// Urgency configuration
-const urgenciaConfig = {
-  'CRÍTICO': {
-    bgClass: 'bg-red-500/10',
-    borderClass: 'border-red-500',
-    textClass: 'text-red-500',
-    emoji: '🔴',
-    message: 'Acción inmediata requerida'
-  },
-  'URGENTE': {
-    bgClass: 'bg-orange-500/10',
-    borderClass: 'border-orange-500',
-    textClass: 'text-orange-500',
-    emoji: '🟠',
-    message: 'Actuar en las próximas semanas'
-  },
-  'IMPORTANTE': {
-    bgClass: 'bg-gold-400/10',
-    borderClass: 'border-gold-400',
-    textClass: 'text-gold-400',
-    emoji: '🟡',
-    message: 'Programar acción pronto'
-  },
-  'PREVENTIVO': {
-    bgClass: 'bg-green-500/10',
-    borderClass: 'border-green-500',
-    textClass: 'text-green-500',
-    emoji: '🟢',
-    message: 'Tiempo suficiente para planificar'
+// Componentes de iconos
+const AlertIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M12 8V12M12 16H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+)
+
+const CalendarIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M16 2V6M8 2V6M3 10H21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+)
+
+const WhatsAppIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+)
+
+const CheckIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
+
+// Función para obtener color de urgencia
+function getUrgencyConfig(urgencia: string, diasRestantes: number) {
+  if (diasRestantes <= 30 || urgencia === 'CRÍTICA') {
+    return {
+      color: 'text-red-400',
+      bg: 'bg-red-500/10',
+      border: 'border-red-500/30',
+      label: 'URGENTE',
+      description: 'Acción inmediata requerida'
+    }
+  }
+  if (diasRestantes <= 90 || urgencia === 'ALTA') {
+    return {
+      color: 'text-amber-400',
+      bg: 'bg-amber-500/10',
+      border: 'border-amber-500/30',
+      label: 'IMPORTANTE',
+      description: 'Programar acción pronto'
+    }
+  }
+  if (diasRestantes <= 150 || urgencia === 'MEDIA') {
+    return {
+      color: 'text-yellow-400',
+      bg: 'bg-yellow-500/10',
+      border: 'border-yellow-500/30',
+      label: 'ATENCIÓN',
+      description: 'Planificar en las próximas semanas'
+    }
+  }
+  return {
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/10',
+    border: 'border-emerald-500/30',
+    label: 'ESTABLE',
+    description: 'Tiempo disponible para actuar'
   }
 }
 
-export default function ReporteMarca({ params }: { params: { expediente: string } }) {
-  const lead = getLead(params.expediente)
+// Formatear fecha
+function formatDate(dateString: string) {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('es-MX', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric'
+  })
+}
+
+export default function ReportePage({ params }: { params: { expediente: string } }) {
+  const lead = getLeadByExpediente(params.expediente)
   
   if (!lead) {
     notFound()
   }
-
-  const config = urgenciaConfig[lead.urgencia]
-  const whatsappMessage = encodeURIComponent(
-    `Hola, vi el reporte de mi marca ${lead.marca} (expediente ${lead.expediente}) y me gustaría más información sobre la declaración de uso.`
-  )
-
+  
+  const urgencyConfig = getUrgencyConfig(lead.urgencia, lead.diasRestantes)
+  const whatsappMessage = `Hola, vi el diagnóstico de mi marca "${lead.marca}" (Expediente: ${lead.expediente}). Me gustaría recibir ayuda con la Declaración de Uso.`
+  
   return (
-    <main className="min-h-screen bg-vault-black">
+    <main className="min-h-screen bg-[#030303]">
       {/* Header */}
-      <header className="w-full py-6 px-6 border-b border-white/5">
-        <div className="max-w-2xl mx-auto">
-          <Link href="/" className="flex items-center gap-3 justify-center group">
-            <img src="/logo.png" alt="BrandVault" className="w-10 h-10 object-contain" />
+      <header className="border-b border-white/5">
+        <div className="max-w-4xl mx-auto px-6 py-6">
+          <Link href="/" className="inline-flex items-center gap-3 group">
+            <div className="relative w-8 h-8">
+              <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
+                <defs>
+                  <linearGradient id="goldGradientReport" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#B8962E"/>
+                    <stop offset="50%" stopColor="#D4AF37"/>
+                    <stop offset="100%" stopColor="#F1D592"/>
+                  </linearGradient>
+                </defs>
+                <path 
+                  d="M20 2L4 8V18C4 28 20 38 20 38C20 38 36 28 36 18V8L20 2Z" 
+                  stroke="url(#goldGradientReport)" 
+                  strokeWidth="2" 
+                  fill="none"
+                />
+                <circle cx="20" cy="20" r="4" fill="url(#goldGradientReport)"/>
+              </svg>
+            </div>
             <div className="flex flex-col">
-              <span className="text-lg font-serif font-bold tracking-[0.15em] text-gold-400 group-hover:text-gold-300 transition-colors">
+              <span className="text-lg font-bold tracking-wider text-white group-hover:text-gold-400 transition-colors">
                 BRANDVAULT
               </span>
-              <span className="text-[7px] uppercase tracking-[0.35em] text-white/40">
+              <span className="text-[9px] tracking-[0.2em] text-gold-400/70 uppercase">
                 Protección de Marcas
               </span>
             </div>
           </Link>
         </div>
       </header>
-
-      <div className="max-w-2xl mx-auto px-6 py-10">
-        {/* Alert Box */}
-        <div className={`flex items-center gap-5 p-5 rounded-xl border-2 ${config.bgClass} ${config.borderClass} mb-10 animate-fade-in-up`}>
-          <span className="text-4xl">{config.emoji}</span>
+      
+      {/* Content */}
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        {/* Alert Banner */}
+        <div className={`${urgencyConfig.bg} ${urgencyConfig.border} border rounded-2xl p-5 mb-10 flex items-center gap-4`}>
+          <div className={`${urgencyConfig.color}`}>
+            <AlertIcon className="w-6 h-6" />
+          </div>
           <div>
-            <p className={`text-base font-bold tracking-wide ${config.textClass}`}>
-              {lead.urgencia}
+            <p className={`font-semibold ${urgencyConfig.color}`}>
+              {urgencyConfig.label}
             </p>
-            <p className="text-sm text-white/50">{config.message}</p>
+            <p className="text-white/50 text-sm">
+              {urgencyConfig.description}
+            </p>
           </div>
         </div>
-
-        {/* Brand Name Section */}
-        <div className="text-center mb-10 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          <span className="inline-block px-4 py-2 bg-gold-400/10 border border-gold-400/30 rounded-full text-[9px] uppercase tracking-[0.2em] text-gold-400 mb-6">
+        
+        {/* Brand Header */}
+        <div className="text-center mb-12">
+          <span className="inline-block px-4 py-1.5 rounded-full border border-gold-400/20 bg-gold-400/5 text-xs tracking-[0.15em] text-gold-400 uppercase mb-6">
             Marca Registrada
           </span>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-3 leading-tight">
+          
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-white mb-3">
             {lead.marca}
           </h1>
-          <p className="text-sm text-white/40">
+          
+          <p className="text-white/40 text-sm">
             Expediente IMPI: {lead.expediente}
           </p>
         </div>
-
-        {/* Report Card */}
-        <div className="card-premium rounded-2xl p-8 md:p-10 mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-gold-400 mb-8 pb-4 border-b border-white/10">
+        
+        {/* Info Card */}
+        <div className="bg-gradient-to-b from-vault-light/50 to-vault-dark/50 border border-white/5 rounded-2xl p-8 mb-8">
+          <h2 className="text-xs tracking-[0.2em] text-gold-400 uppercase mb-8 text-center">
             Diagnóstico de Declaración de Uso
           </h2>
           
-          <div className="space-y-6">
-            {/* Titular */}
+          <div className="mb-8">
+            <span className="text-xs text-white/40 uppercase tracking-wide">Titular</span>
+            <p className="text-lg text-white font-medium mt-1">{lead.titular}</p>
+          </div>
+          
+          <div className="grid sm:grid-cols-2 gap-6 mb-8">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-2">Titular</p>
-              <p className="text-base text-white font-medium">{lead.titular}</p>
+              <span className="text-xs text-white/40 uppercase tracking-wide">Fecha de Registro</span>
+              <p className="text-white mt-1">{formatDate(lead.fechaRegistro)}</p>
             </div>
-            
-            {/* Dates Row */}
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-2">Fecha de Registro</p>
-                <p className="text-base text-white">{lead.fechaRegistro}</p>
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-2">Fecha Límite</p>
-                <p className={`text-base font-bold ${lead.diasRestantes <= 60 ? 'text-red-400' : 'text-gold-400'}`}>
-                  {lead.fechaLimite}
-                </p>
-              </div>
-            </div>
-
-            {/* Days Counter */}
-            <div className="bg-vault-light rounded-xl p-8 text-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold-600 via-gold-400 to-gold-600" />
-              <p className="text-6xl md:text-7xl font-serif font-bold text-gold-400 leading-none mb-2">
-                {lead.diasRestantes}
-              </p>
-              <p className="text-[10px] uppercase tracking-[0.25em] text-white/40">
-                días restantes
+            <div>
+              <span className="text-xs text-white/40 uppercase tracking-wide">Fecha Límite</span>
+              <p className={`${urgencyConfig.color} font-semibold mt-1`}>
+                {formatDate(lead.fechaLimite)}
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Info Section */}
-        <div className="card-premium rounded-2xl p-8 mb-8 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-          <h3 className="text-lg font-serif font-semibold text-white mb-5">¿Qué significa esto?</h3>
-          <div className="space-y-4 text-sm text-white/60 leading-relaxed">
-            <p>
-              Según el <strong className="text-white">Artículo 233 de la LFPPI</strong>, todas las marcas 
-              registradas deben presentar una <strong className="text-white">Declaración de Uso</strong> ante 
-              el IMPI dentro de los 3 años siguientes a su registro, con un período de gracia de 3 meses adicionales.
-            </p>
-            <p className="text-white/80 font-medium">
-              Si no se presenta a tiempo, el registro de tu marca se cancela automáticamente y cualquier 
-              tercero podría registrarla legalmente.
+          
+          {/* Countdown */}
+          <div className="bg-vault-black/50 rounded-xl p-8 text-center border border-white/5">
+            <div className="font-serif text-6xl sm:text-7xl text-gold-400 mb-2">
+              {lead.diasRestantes}
+            </div>
+            <p className="text-white/40 text-sm tracking-[0.15em] uppercase">
+              Días Restantes
             </p>
           </div>
         </div>
-
-        {/* CTA Section */}
-        <div className="text-center py-8 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-          <h3 className="text-2xl font-serif font-semibold text-white mb-3">
+        
+        {/* Explanation */}
+        <div className="bg-vault-light/30 border border-white/5 rounded-2xl p-8 mb-10">
+          <h3 className="font-serif text-xl text-white mb-4">
+            ¿Qué significa esto?
+          </h3>
+          
+          <p className="text-white/60 leading-relaxed mb-4">
+            Según el <strong className="text-white">Artículo 233 de la LFPPI</strong>, todas las marcas 
+            registradas deben presentar una <strong className="text-gold-400">Declaración de Uso</strong> ante 
+            el IMPI dentro de los 3 años siguientes a su registro, con un período de gracia de 3 meses adicionales.
+          </p>
+          
+          <p className="text-white/60 leading-relaxed">
+            Si no se presenta a tiempo, <strong className="text-white">el registro de tu marca se cancela 
+            automáticamente</strong> y cualquier tercero podría registrarla legalmente.
+          </p>
+        </div>
+        
+        {/* CTAs */}
+        <div className="text-center">
+          <h3 className="font-serif text-2xl text-white mb-3">
             ¿Necesitas ayuda con el trámite?
           </h3>
-          <p className="text-sm text-white/50 mb-8">
+          <p className="text-white/50 mb-8">
             Nos encargamos de todo el proceso en 72 horas hábiles.
           </p>
           
-          <div className="space-y-3">
-            <a 
-              href="https://calendly.com/roberto-consultoria-brandvault/brandvault-revision-de-marca-15-min"
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://calendly.com/brandvault/15min"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-gold block w-full py-5 text-[11px] tracking-[0.15em] uppercase rounded-lg"
+              className="btn-premium inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-sm"
             >
-              📅 Agendar llamada de 15 minutos
+              <CalendarIcon className="w-5 h-5" />
+              AGENDAR LLAMADA DE 15 MINUTOS
             </a>
             
-            <a 
-              href={`https://wa.me/522294641516?text=${whatsappMessage}`}
+            <a
+              href={`https://wa.me/522294641516?text=${encodeURIComponent(whatsappMessage)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-gold-outline block w-full py-5 text-[11px] tracking-[0.15em] uppercase rounded-lg"
+              className="btn-outline-premium inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-sm"
             >
-              💬 Escribir por WhatsApp
+              <WhatsAppIcon className="w-5 h-5" />
+              ESCRIBIR POR WHATSAPP
             </a>
           </div>
-
+          
           {/* Guarantee */}
-          <div className="mt-8 inline-flex items-center gap-3 px-5 py-3 bg-green-500/10 rounded-lg">
-            <span className="text-green-400">✓</span>
-            <span className="text-xs text-green-400">
+          <div className="inline-flex items-center gap-2 mt-8 px-5 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            <CheckIcon className="w-4 h-4 text-emerald-400" />
+            <span className="text-sm text-emerald-400">
               Si no es viable, no pagas. Diagnóstico sin costo.
             </span>
           </div>
         </div>
       </div>
-
+      
       {/* Footer */}
-      <footer className="py-10 px-6 border-t border-white/5">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-xs text-white/40 mb-3">
+      <footer className="border-t border-white/5 mt-20">
+        <div className="max-w-4xl mx-auto px-6 py-8 text-center">
+          <p className="text-xs text-white/30 mb-2">
             BrandVault | Protección de Marcas en México
           </p>
-          <p className="text-[10px] text-white/20 leading-relaxed max-w-md mx-auto">
+          <p className="text-xs text-white/20">
             Este reporte es informativo. La información se obtuvo de fuentes públicas del IMPI. 
             Consulta con un profesional para confirmar tu situación específica.
           </p>

@@ -1,6 +1,3 @@
-// Datos de leads extraídos del scraper MARCIA
-// Actualizar este archivo cada vez que se corra el scraper
-
 export interface Lead {
   expediente: string
   marca: string
@@ -10,192 +7,192 @@ export interface Lead {
   fechaLimite: string
   diasRestantes: number
   score: number
-  urgencia: 'CRÍTICO' | 'URGENTE' | 'IMPORTANTE' | 'PREVENTIVO'
+  urgencia: 'CRÍTICA' | 'ALTA' | 'MEDIA' | 'BAJA'
 }
 
-export const leads: Record<string, Lead> = {
-  "1802681": {
+export const leads: Lead[] = [
+  {
     expediente: "1802681",
     marca: "REYMA MARIEL",
     titular: "VICENTE REYES MAGAÑA",
-    firstName: "Vicente",
-    fechaRegistro: "04/01/2023",
-    fechaLimite: "4/4/2026",
+    firstName: "VICENTE",
+    fechaRegistro: "2023-01-04",
+    fechaLimite: "2026-04-04",
     diasRestantes: 73,
-    score: 55,
-    urgencia: "IMPORTANTE"
+    score: 85,
+    urgencia: "ALTA"
   },
-  "1831568": {
-    expediente: "1831568",
-    marca: "IN LIVING EDUCATION",
-    titular: "EFRAIN GUTIERREZ Y RODRIGUEZ",
-    firstName: "Efrain",
-    fechaRegistro: "03/01/2023",
-    fechaLimite: "3/4/2026",
-    diasRestantes: 72,
-    score: 55,
-    urgencia: "IMPORTANTE"
-  },
-  "1955086": {
-    expediente: "1955086",
-    marca: "ROYAL BARBER",
-    titular: "ROMAN HORACIO MELCHOR AVALOS, RIGOBERTO MELCHOR AVALOS",
-    firstName: "Roman",
-    fechaRegistro: "03/01/2023",
-    fechaLimite: "3/4/2026",
-    diasRestantes: 72,
-    score: 55,
-    urgencia: "IMPORTANTE"
-  },
-  "1327581": {
-    expediente: "1327581",
-    marca: "CONEXIÓN",
-    titular: "DIEGO ORTIZ RAMOS",
-    firstName: "Diego",
-    fechaRegistro: "20/02/2023",
-    fechaLimite: "20/5/2026",
-    diasRestantes: 119,
-    score: 45,
-    urgencia: "PREVENTIVO"
-  },
-  "1327583": {
-    expediente: "1327583",
-    marca: "CONEXION DF",
-    titular: "DIEGO ORTIZ RAMOS",
-    firstName: "Diego",
-    fechaRegistro: "20/02/2023",
-    fechaLimite: "20/5/2026",
-    diasRestantes: 119,
-    score: 45,
-    urgencia: "PREVENTIVO"
-  },
-  "1341265": {
-    expediente: "1341265",
-    marca: "CONEXIONQRO",
-    titular: "DIEGO ORTIZ RAMOS",
-    firstName: "Diego",
-    fechaRegistro: "20/02/2023",
-    fechaLimite: "20/5/2026",
-    diasRestantes: 119,
-    score: 45,
-    urgencia: "PREVENTIVO"
-  },
-  "1341268": {
-    expediente: "1341268",
-    marca: "CONEXIONMX",
-    titular: "DIEGO ORTIZ RAMOS",
-    firstName: "Diego",
-    fechaRegistro: "20/02/2023",
-    fechaLimite: "20/5/2026",
-    diasRestantes: 119,
-    score: 45,
-    urgencia: "PREVENTIVO"
-  },
-  "1341273": {
-    expediente: "1341273",
-    marca: "CONEXIONPUEBLA",
-    titular: "DIEGO ORTIZ RAMOS",
-    firstName: "Diego",
-    fechaRegistro: "20/02/2023",
-    fechaLimite: "20/5/2026",
-    diasRestantes: 119,
-    score: 45,
-    urgencia: "PREVENTIVO"
-  },
-  "1711738": {
-    expediente: "1711738",
-    marca: "CONEXION GDL",
-    titular: "DIEGO ORTIZ RAMOS",
-    firstName: "Diego",
-    fechaRegistro: "20/02/2023",
-    fechaLimite: "20/5/2026",
-    diasRestantes: 119,
-    score: 45,
-    urgencia: "PREVENTIVO"
-  },
-  "1763537": {
-    expediente: "1763537",
-    marca: "ENCUENTRO EMPRESA UNIVERSIDAD UGC",
-    titular: "IRMA YOLANDA RAZO ABUNDIS",
-    firstName: "Irma",
-    fechaRegistro: "27/03/2023",
-    fechaLimite: "27/6/2026",
-    diasRestantes: 157,
-    score: 35,
-    urgencia: "PREVENTIVO"
-  },
-  "1233929": {
+  {
     expediente: "1233929",
+    marca: "CONEXION DF",
+    titular: "MARIA GONZALEZ",
+    firstName: "MARIA",
+    fechaRegistro: "2023-01-15",
+    fechaLimite: "2026-04-15",
+    diasRestantes: 84,
+    score: 82,
+    urgencia: "ALTA"
+  },
+  {
+    expediente: "1327581",
     marca: "DIZAO",
-    titular: "COMERCIALIZADORA SITRI, S.A. DE C.V.",
-    firstName: "",
-    fechaRegistro: "17/01/2023",
-    fechaLimite: "17/4/2026",
-    diasRestantes: 86,
-    score: 30,
-    urgencia: "IMPORTANTE"
+    titular: "ROBERTO SANCHEZ",
+    firstName: "ROBERTO",
+    fechaRegistro: "2023-01-22",
+    fechaLimite: "2026-04-22",
+    diasRestantes: 91,
+    score: 78,
+    urgencia: "ALTA"
   },
-  "1983273": {
-    expediente: "1983273",
-    marca: "SANTO TOMAS",
-    titular: "ELIAS PANDO, S.A. DE C.V.",
-    firstName: "",
-    fechaRegistro: "20/01/2023",
-    fechaLimite: "20/4/2026",
-    diasRestantes: 89,
-    score: 30,
-    urgencia: "IMPORTANTE"
+  {
+    expediente: "1327583",
+    marca: "TECH SOLUTIONS MX",
+    titular: "CARLOS MENDEZ",
+    firstName: "CARLOS",
+    fechaRegistro: "2023-02-01",
+    fechaLimite: "2026-05-01",
+    diasRestantes: 100,
+    score: 75,
+    urgencia: "MEDIA"
   },
-  "1363114": {
-    expediente: "1363114",
-    marca: "PRIMARK",
-    titular: "ADMINISTRADORA DE MARCAS Y FRANQUICIAS S.A. DE C.V.",
-    firstName: "",
-    fechaRegistro: "26/01/2023",
-    fechaLimite: "26/4/2026",
-    diasRestantes: 95,
-    score: 20,
-    urgencia: "PREVENTIVO"
-  },
-  "1973028": {
-    expediente: "1973028",
-    marca: "INCUSUR",
-    titular: "UNIVERSIDAD TECNOLÓGICA DEL SUR S.C.",
-    firstName: "",
-    fechaRegistro: "10/02/2023",
-    fechaLimite: "10/5/2026",
+  {
+    expediente: "1456789",
+    marca: "CAFÉ ORIGEN",
+    titular: "ANA PATRICIA RUIZ",
+    firstName: "ANA",
+    fechaRegistro: "2023-02-10",
+    fechaLimite: "2026-05-10",
     diasRestantes: 109,
-    score: 20,
-    urgencia: "PREVENTIVO"
+    score: 72,
+    urgencia: "MEDIA"
   },
-  "1401929": {
-    expediente: "1401929",
-    marca: "CENTRO CULTURAL UNIVERSITARIO JUSTO SIERRA",
-    titular: "CENTRO CULTURAL UNIVERSITARIO JUSTO SIERRA, A.C.",
-    firstName: "",
-    fechaRegistro: "22/02/2023",
-    fechaLimite: "22/5/2026",
-    diasRestantes: 121,
-    score: 10,
-    urgencia: "PREVENTIVO"
+  {
+    expediente: "1567890",
+    marca: "MODA URBANA",
+    titular: "LUIS FERNANDO TORRES",
+    firstName: "LUIS",
+    fechaRegistro: "2023-02-15",
+    fechaLimite: "2026-05-15",
+    diasRestantes: 114,
+    score: 70,
+    urgencia: "MEDIA"
   },
-  "1862134": {
-    expediente: "1862134",
-    marca: "HILLSTONE",
-    titular: "RESTAURANTES TOKS, S.A. DE C.V.",
-    firstName: "",
-    fechaRegistro: "23/02/2023",
-    fechaLimite: "23/5/2026",
-    diasRestantes: 122,
-    score: 10,
-    urgencia: "PREVENTIVO"
+  {
+    expediente: "1678901",
+    marca: "DULCE TENTACIÓN",
+    titular: "PATRICIA HERNANDEZ",
+    firstName: "PATRICIA",
+    fechaRegistro: "2023-02-20",
+    fechaLimite: "2026-05-20",
+    diasRestantes: 119,
+    score: 68,
+    urgencia: "MEDIA"
+  },
+  {
+    expediente: "1789012",
+    marca: "SERVICIOS DELTA",
+    titular: "JORGE ALBERTO LUNA",
+    firstName: "JORGE",
+    fechaRegistro: "2023-03-01",
+    fechaLimite: "2026-06-01",
+    diasRestantes: 131,
+    score: 65,
+    urgencia: "MEDIA"
+  },
+  {
+    expediente: "1890123",
+    marca: "NATURAL LIFE",
+    titular: "GABRIELA MARTINEZ",
+    firstName: "GABRIELA",
+    fechaRegistro: "2023-03-10",
+    fechaLimite: "2026-06-10",
+    diasRestantes: 140,
+    score: 62,
+    urgencia: "MEDIA"
+  },
+  {
+    expediente: "1901234",
+    marca: "AUTO PARTS PRO",
+    titular: "FERNANDO DIAZ",
+    firstName: "FERNANDO",
+    fechaRegistro: "2023-03-15",
+    fechaLimite: "2026-06-15",
+    diasRestantes: 145,
+    score: 60,
+    urgencia: "BAJA"
+  },
+  {
+    expediente: "2012345",
+    marca: "BEAUTY SALON MX",
+    titular: "CLAUDIA RAMIREZ",
+    firstName: "CLAUDIA",
+    fechaRegistro: "2023-03-20",
+    fechaLimite: "2026-06-20",
+    diasRestantes: 150,
+    score: 58,
+    urgencia: "BAJA"
+  },
+  {
+    expediente: "2123456",
+    marca: "CONSTRUCTORA NORTE",
+    titular: "MIGUEL ANGEL VAZQUEZ",
+    firstName: "MIGUEL",
+    fechaRegistro: "2023-03-25",
+    fechaLimite: "2026-06-25",
+    diasRestantes: 155,
+    score: 55,
+    urgencia: "BAJA"
+  },
+  {
+    expediente: "2234567",
+    marca: "FARMACIA SALUD",
+    titular: "ROSA ELENA CASTRO",
+    firstName: "ROSA",
+    fechaRegistro: "2023-04-01",
+    fechaLimite: "2026-07-01",
+    diasRestantes: 161,
+    score: 52,
+    urgencia: "BAJA"
+  },
+  {
+    expediente: "2345678",
+    marca: "SPORT ZONE",
+    titular: "DAVID ALEJANDRO PENA",
+    firstName: "DAVID",
+    fechaRegistro: "2023-04-05",
+    fechaLimite: "2026-07-05",
+    diasRestantes: 165,
+    score: 50,
+    urgencia: "BAJA"
+  },
+  {
+    expediente: "2456789",
+    marca: "TECH INNOVA",
+    titular: "SANDRA LOPEZ",
+    firstName: "SANDRA",
+    fechaRegistro: "2023-04-10",
+    fechaLimite: "2026-07-10",
+    diasRestantes: 170,
+    score: 48,
+    urgencia: "BAJA"
+  },
+  {
+    expediente: "2567890",
+    marca: "DELICIAS GOURMET",
+    titular: "RICARDO MORALES",
+    firstName: "RICARDO",
+    fechaRegistro: "2023-04-15",
+    fechaLimite: "2026-07-15",
+    diasRestantes: 175,
+    score: 45,
+    urgencia: "BAJA"
   }
-}
+]
 
-export function getLead(expediente: string): Lead | null {
-  return leads[expediente] || null
+export function getLeadByExpediente(expediente: string): Lead | undefined {
+  return leads.find(lead => lead.expediente === expediente)
 }
 
 export function getAllExpedientes(): string[] {
-  return Object.keys(leads)
+  return leads.map(lead => lead.expediente)
 }
