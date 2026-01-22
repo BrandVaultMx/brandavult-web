@@ -69,12 +69,8 @@ export default function ReportePage({ params }: { params: { expediente: string }
       <header className="border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6 py-6">
           <Link href="/" className="inline-flex items-center gap-3 group">
-            <div className="w-8 h-8">
-              <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
-                <defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#B8962E"/><stop offset="50%" stopColor="#D4AF37"/><stop offset="100%" stopColor="#F1D592"/></linearGradient></defs>
-                <path d="M20 2L4 8V18C4 28 20 38 20 38C20 38 36 28 36 18V8L20 2Z" stroke="url(#lg)" strokeWidth="2" fill="none"/>
-                <circle cx="20" cy="20" r="4" fill="url(#lg)"/>
-              </svg>
+            <div className="w-10 h-10">
+              <img src="/logo.png" alt="BrandVault" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="text-lg font-bold tracking-wider text-white group-hover:text-gold-400 transition-colors">BRANDVAULT</span>

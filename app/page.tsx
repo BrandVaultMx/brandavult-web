@@ -231,17 +231,8 @@ function FloatingWhatsApp() {
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      <motion.div className="relative w-10 h-10" whileHover={{ rotate: [0, -10, 10, 0] }} transition={{ duration: 0.5 }}>
-        <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
-          <defs>
-            <linearGradient id="logoGold" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#B8962E"/><stop offset="50%" stopColor="#D4AF37"/><stop offset="100%" stopColor="#F1D592"/>
-            </linearGradient>
-          </defs>
-          <path d="M20 2L4 8V18C4 28 20 38 20 38C20 38 36 28 36 18V8L20 2Z" stroke="url(#logoGold)" strokeWidth="2" fill="none"/>
-          <path d="M20 10L12 14V20C12 25 20 30 20 30C20 30 28 25 28 20V14L20 10Z" fill="url(#logoGold)" opacity="0.2"/>
-          <circle cx="20" cy="20" r="4" fill="url(#logoGold)"/>
-        </svg>
+      <motion.div className="relative w-10 h-10" whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
+        <img src="/logo.png" alt="BrandVault" className="w-full h-full object-contain" />
       </motion.div>
       <div className="flex flex-col">
         <span className="text-xl font-bold tracking-wider text-white">BRANDVAULT</span>
