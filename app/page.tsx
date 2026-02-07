@@ -19,6 +19,31 @@ const SOCIAL_LINKS = {
 }
 
 // ============================================
+// LEAD CAPTURE HELPER
+// ============================================
+
+async function saveLead(data: {
+  nombre: string
+  email?: string
+  telefono?: string
+  marca: string
+  servicio?: string
+  fuente?: string
+}) {
+  try {
+    const res = await fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    return await res.json()
+  } catch (err) {
+    console.error('Error saving lead:', err)
+    return { success: false }
+  }
+}
+
+// ============================================
 // ICONS (SVG Components)
 // ============================================
 
@@ -319,14 +344,28 @@ function Navigation() {
 function HeroSection() {
   const [nombre, setNombre] = useState('')
   const [marca, setMarca] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [saved, setSaved] = useState(false)
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
   const y = useTransform(scrollYProgress, [0, 1], [0, 200])
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    window.open(`${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent(`Hola, soy ${nombre}. Me interesa proteger mi marca "${marca}". ¿Podrían ayudarme?`)}`, '_blank')
+    setLoading(true)
+    
+    // Save lead to Supabase (non-blocking for UX)
+    saveLead({ nombre, marca, servicio: 'consulta_hero', fuente: 'hero' })
+    
+    // Brief animation then redirect
+    await new Promise(r => setTimeout(r, 600))
+    setSaved(true)
+    await new Promise(r => setTimeout(r, 800))
+    
+    window.open(`${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent(`Hola, soy ${nombre}. Quiero proteger mi marca "${marca}". ¿Podrían orientarme?`)}`, '_blank')
+    setLoading(false)
+    setSaved(false)
   }
   
   return (
@@ -372,7 +411,7 @@ function HeroSection() {
         {/* Subheadline */}
         <FadeIn delay={0.5} className="text-center mb-12">
           <p className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto leading-relaxed font-light">
-            No registramos marcas; construimos la armadura jurídica que protege tu patrimonio contra infracciones y robo de identidad. Obtén un <span className="text-gold-400 font-medium">diagnóstico preliminar gratuito</span> con nuestra IA legal especializada.
+            No registramos marcas; construimos la armadura jurídica que protege tu patrimonio contra infracciones y robo de identidad.
           </p>
         </FadeIn>
         
@@ -385,16 +424,34 @@ function HeroSection() {
               <input type="text" placeholder="Nombre de la marca" value={marca} onChange={(e) => setMarca(e.target.value)} required
                 className="flex-1 px-5 py-4 rounded-xl bg-white/[0.05] border border-white/5 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-gold-400/50 transition-all" />
               <MagneticButton>
-                <motion.button type="submit" className="btn-premium px-8 py-4 rounded-xl text-sm whitespace-nowrap"
-                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  DIAGNÓSTICO IA GRATUITO
+                <motion.button type="submit" disabled={loading}
+                  className={`btn-premium px-8 py-4 rounded-xl text-sm whitespace-nowrap ${loading ? 'opacity-80' : ''}`}
+                  whileHover={loading ? {} : { scale: 1.02 }} whileTap={loading ? {} : { scale: 0.98 }}>
+                  {saved ? '✓ DATOS ENVIADOS' : loading ? (
+                    <span className="flex items-center gap-2">
+                      <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        className="inline-block w-4 h-4 border-2 border-black/20 border-t-black rounded-full" />
+                      ENVIANDO...
+                    </span>
+                  ) : 'CONSULTA GRATUITA'}
                 </motion.button>
               </MagneticButton>
             </div>
           </form>
           
+          {/* AI Maintenance Notice */}
+          <div className="flex justify-center mt-4 mb-2">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold-400/10 bg-gold-400/[0.03]">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-400" />
+              </span>
+              <span className="text-[10px] tracking-[0.1em] text-white/40">DIAGNÓSTICO IA EN DESARROLLO — UN ESPECIALISTA TE ATENDERÁ POR WHATSAPP</span>
+            </div>
+          </div>
+          
           <div className="flex flex-wrap justify-center gap-6 mt-6 text-xs text-white/30">
-            {['Sin compromiso', 'Respuesta en 24 horas', '100% Confidencial'].map(t => (
+            {['Sin compromiso', 'Respuesta en 48-72 hrs', '100% Confidencial'].map(t => (
               <span key={t} className="flex items-center gap-2"><Icons.Check className="w-4 h-4 text-gold-400/60" />{t}</span>
             ))}
           </div>
@@ -496,9 +553,9 @@ function RisksSection() {
 
 function MethodologySection() {
   const steps = [
-    { n: '01', title: 'DIAGNÓSTICO', desc: 'Auditoría fonética profunda para descartar conflictos con marcas similares antes de invertir.', Icon: Icons.Scale },
-    { n: '02', title: 'ESTRATEGIA', desc: 'Redacción técnica bajo la Clasificación de Niza para blindar correctamente tus productos y servicios.', Icon: Icons.Document },
-    { n: '03', title: 'TÍTULO OFICIAL', desc: 'Gestión burocrática total hasta la entrega del Título de Propiedad Intelectual en tu mano.', Icon: Icons.Shield },
+    { n: '01', title: 'DIAGNÓSTICO', desc: 'Auditoría fonética, visual y conceptual con sistema de scoring de 100 puntos. Buscamos conflictos reales en MARCIA antes de que inviertas un peso en el registro.', Icon: Icons.Scale },
+    { n: '02', title: 'ESTRATEGIA', desc: 'Clasificación Niza precisa para blindar tus productos y servicios. Identificamos las clases necesarias — ni más ni menos — para protección efectiva.', Icon: Icons.Document },
+    { n: '03', title: 'TÍTULO OFICIAL', desc: 'Gestión integral ante el IMPI hasta la entrega de tu Título de Propiedad Intelectual. Incluye seguimiento y recordatorio de Declaración de Uso a 3 años.', Icon: Icons.Shield },
   ]
   
   return (
@@ -533,39 +590,182 @@ function MethodologySection() {
 }
 
 // ============================================
+// CONTACT MODAL
+// ============================================
+
+function ContactModal({ isOpen, onClose, servicio }: { 
+  isOpen: boolean; onClose: () => void; servicio: 'blindaje' | 'diagnostico' | 'declaracion' 
+}) {
+  const [form, setForm] = useState({ nombre: '', email: '', telefono: '', marca: '' })
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+
+  const servicios = {
+    blindaje: {
+      title: 'Blindaje Federal Completo',
+      price: '$5,800 MXN + IVA',
+      whatsappMsg: 'Hola, quiero contratar el Blindaje Federal para mi marca',
+      payLink: SOCIAL_LINKS.mercadopago,
+      showPay: true,
+    },
+    diagnostico: {
+      title: 'Diagnóstico de Viabilidad',
+      price: '$800 MXN + IVA',
+      whatsappMsg: 'Hola, quiero contratar el Diagnóstico de Viabilidad para mi marca',
+      payLink: null,
+      showPay: false,
+    },
+    declaracion: {
+      title: 'Declaración de Uso',
+      price: '$1,999 MXN + IVA',
+      whatsappMsg: 'Hola, necesito realizar la Declaración de Uso de mi marca',
+      payLink: null,
+      showPay: false,
+    },
+  }
+
+  const info = servicios[servicio]
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+
+    await saveLead({
+      nombre: form.nombre,
+      email: form.email,
+      telefono: form.telefono,
+      marca: form.marca,
+      servicio,
+      fuente: 'pricing_modal',
+    })
+
+    setSuccess(true)
+    await new Promise(r => setTimeout(r, 1200))
+
+    // Redirect to payment or WhatsApp
+    const msg = `${info.whatsappMsg} "${form.marca}". Mi nombre es ${form.nombre}. Email: ${form.email}. Tel: ${form.telefono}.`
+    
+    if (info.showPay && info.payLink) {
+      window.open(info.payLink, '_blank')
+    } else {
+      window.open(`${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank')
+    }
+    
+    setLoading(false)
+    setSuccess(false)
+    setForm({ nombre: '', email: '', telefono: '', marca: '' })
+    onClose()
+  }
+
+  const inputClass = "w-full px-5 py-4 rounded-xl bg-white/[0.05] border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-gold-400/50 transition-all"
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        >
+          {/* Backdrop */}
+          <motion.div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
+          
+          {/* Modal */}
+          <motion.div 
+            className="relative w-full max-w-lg bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 sm:p-10"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+          >
+            {/* Close button */}
+            <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 transition-all">
+              ✕
+            </button>
+
+            {/* Header */}
+            <div className="text-center mb-8">
+              <span className="text-xs tracking-[0.3em] text-gold-400 uppercase">{info.title}</span>
+              <p className="text-2xl font-serif text-white mt-2">{info.price}</p>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input type="text" placeholder="Tu nombre completo" value={form.nombre}
+                onChange={e => setForm({...form, nombre: e.target.value})} required className={inputClass} />
+              
+              <input type="email" placeholder="Email" value={form.email}
+                onChange={e => setForm({...form, email: e.target.value})} required className={inputClass} />
+              
+              <input type="tel" placeholder="Teléfono (WhatsApp)" value={form.telefono}
+                onChange={e => setForm({...form, telefono: e.target.value})} required className={inputClass} />
+              
+              <input type="text" placeholder="Nombre de tu marca" value={form.marca}
+                onChange={e => setForm({...form, marca: e.target.value})} required className={inputClass} />
+              
+              <motion.button type="submit" disabled={loading}
+                className={`w-full btn-premium py-4 rounded-xl text-sm font-medium ${loading ? 'opacity-80' : ''}`}
+                whileHover={loading ? {} : { scale: 1.01 }} whileTap={loading ? {} : { scale: 0.99 }}>
+                {success ? '✓ DATOS RECIBIDOS' : loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      className="inline-block w-4 h-4 border-2 border-black/20 border-t-black rounded-full" />
+                    PROCESANDO...
+                  </span>
+                ) : info.showPay ? 'CONTINUAR AL PAGO →' : 'SOLICITAR POR WHATSAPP →'}
+              </motion.button>
+            </form>
+
+            <p className="text-[11px] text-white/20 text-center mt-6">
+              Tus datos están protegidos. Solo los usaremos para gestionar tu servicio.
+            </p>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+// ============================================
 // PRICING SECTION
 // ============================================
 
 function PricingSection() {
   const [activeTab, setActiveTab] = useState(0)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalServicio, setModalServicio] = useState<'blindaje' | 'diagnostico' | 'declaracion'>('blindaje')
   
   const plans = [
     {
       tag: 'Blindaje Federal Completo',
       price: 5800,
-      priceLabel: 'MXN + IVA • Por Clase Internacional',
-      features: ['Pago de Derechos IMPI', 'Diagnóstico de Viabilidad Incluido', 'Estrategia de Clasificación', 'Título Digital Oficial', 'Recordatorio de Declaración de Uso a 3 años'],
-      guarantee: 'Garantía: Si no es registrable, no pagas honorarios',
+      priceLabel: 'MXN + IVA • Todo Incluido',
+      features: ['Derechos Federales IMPI Incluidos', 'Diagnóstico de Viabilidad Incluido', 'Estrategia de Clasificación Niza', 'Gestión Completa ante IMPI', 'Título Digital Oficial + Recordatorio Art. 233'],
+      guarantee: 'Compromiso Verde: Si tu diagnóstico es verde (75+ pts) y el IMPI rechaza, no cobramos honorarios',
       cta: 'INICIAR PROTECCIÓN',
       ctaLink: SOCIAL_LINKS.mercadopago,
+      modalKey: 'blindaje' as const,
       showInvoice: true,
       badge: null,
+      footnote: null,
     },
     {
       tag: 'Diagnóstico de Viabilidad',
       price: 800,
-      priceLabel: 'MXN + IVA • Se descuenta del Blindaje Federal',
+      priceLabel: 'MXN + IVA • Entrega en 48-72 hrs hábiles',
       features: [
-        'Auditoría fonética y visual exhaustiva',
-        'Búsqueda en bases IMPI reales',
-        'Análisis de conflictos potenciales',
-        'Reporte detallado por especialista',
+        'Auditoría fonética, visual y conceptual',
+        'Búsqueda exhaustiva en bases IMPI (MARCIA)',
+        'Análisis de conflictos con sistema de scoring',
+        'Reporte profesional con semáforo de viabilidad',
       ],
-      guarantee: 'Se descuenta íntegramente al contratar tu Blindaje Federal',
+      guarantee: 'Se descuenta del Blindaje Federal si tu resultado es semáforo verde',
       cta: 'SOLICITAR DIAGNÓSTICO',
       ctaLink: `${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent('Hola, me interesa el Diagnóstico de Viabilidad de Registro de marca.')}`,
+      modalKey: 'diagnostico' as const,
       showInvoice: false,
       badge: 'Elaborado a mano por especialistas en PI',
+      footnote: null,
     },
     {
       tag: 'Declaración de Uso (Art. 233)',
@@ -580,8 +780,10 @@ function PricingSection() {
       guarantee: 'Obligatoria a 3 años del registro — evita la cancelación de tu marca',
       cta: 'DECLARAR USO',
       ctaLink: `${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent('Hola, necesito realizar la Declaración de Uso de mi marca registrada.')}`,
+      modalKey: 'declaracion' as const,
       showInvoice: false,
       badge: null,
+      footnote: null,
     },
   ]
 
@@ -683,17 +885,23 @@ function PricingSection() {
                     ))}
                   </div>
                   
-                  <motion.div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-emerald-500/30 bg-emerald-500/5 mb-10" whileHover={{ scale: 1.02 }}>
+                  <motion.div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-emerald-500/30 bg-emerald-500/5 mb-6" whileHover={{ scale: 1.02 }}>
                     <Icons.Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-                    <span className="text-sm text-emerald-400 tracking-wide uppercase font-medium">{plan.guarantee}</span>
+                    <span className="text-xs sm:text-sm text-emerald-400 tracking-wide uppercase font-medium">{plan.guarantee}</span>
                   </motion.div>
                   
+                  {plan.footnote && (
+                    <p className="text-xs text-white/30 mb-10">{plan.footnote}</p>
+                  )}
+                  {!plan.footnote && <div className="mb-10" />}
+                  
                   <MagneticButton className="inline-block">
-                    <motion.a href={plan.ctaLink} target="_blank" rel="noopener noreferrer"
+                    <motion.button 
+                      onClick={() => { setModalServicio(plan.modalKey); setModalOpen(true) }}
                       className="inline-flex items-center gap-3 px-10 py-5 rounded-xl btn-premium text-sm"
                       whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                       {plan.cta}<Icons.Arrow className="w-4 h-4" />
-                    </motion.a>
+                    </motion.button>
                   </MagneticButton>
                   
                   {plan.showInvoice && (
@@ -709,6 +917,7 @@ function PricingSection() {
           </div>
         </FadeIn>
       </div>
+      <ContactModal isOpen={modalOpen} onClose={() => setModalOpen(false)} servicio={modalServicio} />
     </section>
   )
 }
@@ -720,12 +929,13 @@ function PricingSection() {
 function FAQSection() {
   const [open, setOpen] = useState<number | null>(null)
   const faqs = [
-    { q: '¿Los $5,800 ya incluyen el pago al Gobierno?', a: 'Sí, absolutamente. Es una tarifa "All-Inclusive". Nosotros cubrimos los Derechos Federales del IMPI por ti.' },
-    { q: '¿Qué pasa si rechazan mi marca?', a: 'Aplicamos "Cero Riesgo". Antes de cobrarte, hacemos una auditoría profunda. Si vemos riesgo, te lo decimos y no gastas.' },
-    { q: '¿Protege solo el nombre o también el logo?', a: 'Protegemos AMBOS sin costo adicional en la misma solicitud.' },
-    { q: '¿Cuánto tarda el registro?', a: 'La resolución oficial toma de 4 a 6 meses. Sin embargo, tu protección legal inicia en 24 horas tras ingresar la solicitud.' },
-    { q: '¿Tengo que ir a firmar papeles?', a: 'No. Todo el proceso es 100% digital y remoto. Nosotros gestionamos la burocracia con nuestra FIEL de gestores acreditados.' },
-    { q: '¿Necesito estar dado de alta en el SAT?', a: 'No es obligatorio. Puedes proteger tu marca como Persona Física con tu CURP o como Empresa.' },
+    { q: '¿Los $5,800 ya incluyen el pago al IMPI?', a: 'Sí. Los $5,800 MXN + IVA cubren todo: derechos federales del IMPI, diagnóstico de viabilidad, estrategia de clasificación Niza, gestión integral y entrega del título. No hay pagos sorpresa ni costos ocultos.' },
+    { q: '¿Qué pasa si mi marca tiene riesgo de rechazo?', a: 'Antes de registrar, hacemos un Diagnóstico de Viabilidad con un sistema de scoring de 0 a 100 puntos y semáforo. Si resulta verde (75+ pts), procedemos con nuestro Compromiso Verde: si el IMPI rechaza por una causa que debimos detectar, no cobramos honorarios. Si es amarillo o rojo, te informamos los riesgos concretos y te ofrecemos un segundo diagnóstico con marca modificada a precio preferencial de $400 MXN, o proceder bajo tu propio riesgo con consentimiento informado.' },
+    { q: '¿Protege solo el nombre o también el logo?', a: 'Depende del tipo de solicitud. Una marca denominativa protege solo el nombre. Una marca mixta protege nombre + logo en una sola solicitud. Si solo tienes un diseño sin nombre, se registra como marca innominada. Te asesoramos sobre cuál conviene más según tu caso.' },
+    { q: '¿Cuánto tarda el registro?', a: 'La resolución oficial del IMPI toma de 4 a 6 meses. Sin embargo, tu protección legal inicia desde que se presenta la solicitud — cualquier tercero que intente registrar algo similar después de esa fecha, tú tienes prioridad.' },
+    { q: '¿Necesito estar dado de alta en el SAT?', a: 'No es obligatorio. Puedes registrar tu marca como persona física con tu CURP o como persona moral. No necesitas RFC con actividad empresarial para proteger tu marca.' },
+    { q: '¿Qué es la Declaración de Uso y por qué importa?', a: 'El Artículo 233 de la Ley Federal de Protección a la Propiedad Industrial obliga a declarar el uso de tu marca dentro de los 3 años siguientes a su concesión. Si no la presentas, el IMPI puede cancelar tu registro. Muchos titulares no conocen esta obligación — nosotros te recordamos y gestionamos el trámite.' },
+    { q: '¿Qué es el Compromiso Verde?', a: 'Es nuestra política de garantía. Si tu diagnóstico resulta en semáforo verde (75+ puntos de 100) y decides proceder al Blindaje Federal, nos comprometemos: si el IMPI rechaza la marca por una causa que nuestro análisis debió detectar, no cobramos los honorarios profesionales. Si tu diagnóstico es amarillo o rojo, te ofrecemos un segundo estudio con marca modificada a $400 MXN (precio preferencial).' },
   ]
   
   return (
