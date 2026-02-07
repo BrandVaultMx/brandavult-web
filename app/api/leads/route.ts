@@ -37,12 +37,13 @@ export async function POST(req: NextRequest) {
     // Discord notification (non-blocking)
     if (DISCORD_WEBHOOK) {
       const emoji = servicio === 'blindaje' ? '🛡️' : servicio === 'diagnostico' ? '🔍' : servicio === 'declaracion' ? '📋' : '🤖'
-      const servicioLabel = {
+      const servicioLabels: Record<string, string> = {
         blindaje: 'Blindaje Federal ($5,800)',
         diagnostico: 'Diagnóstico de Viabilidad ($800)',
         declaracion: 'Declaración de Uso ($1,999)',
         diagnostico_ia: 'Diagnóstico IA (Lead)',
-      }[servicio || 'diagnostico_ia'] || servicio
+      }
+      const servicioLabel = servicioLabels[servicio || 'diagnostico_ia'] || servicio
 
       fetch(DISCORD_WEBHOOK, {
         method: 'POST',
