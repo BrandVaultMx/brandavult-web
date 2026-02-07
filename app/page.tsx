@@ -541,10 +541,10 @@ function PricingSection() {
   
   const plans = [
     {
-      tag: 'Honorarios Profesionales',
+      tag: 'Blindaje Federal Completo',
       price: 5800,
       priceLabel: 'MXN + IVA • Por Clase Internacional',
-      features: ['Pago de Derechos IMPI', 'Diagnóstico de Viabilidad', 'Estrategia de Clasificación', 'Título Digital Oficial', 'Recordatorio de Declaración de Uso a 3 años'],
+      features: ['Pago de Derechos IMPI', 'Diagnóstico de Viabilidad Incluido', 'Estrategia de Clasificación', 'Título Digital Oficial', 'Recordatorio de Declaración de Uso a 3 años'],
       guarantee: 'Garantía: Si no es registrable, no pagas honorarios',
       cta: 'INICIAR PROTECCIÓN',
       ctaLink: SOCIAL_LINKS.mercadopago,
@@ -553,23 +553,40 @@ function PricingSection() {
     },
     {
       tag: 'Diagnóstico de Viabilidad',
-      price: 1500,
-      priceLabel: 'MXN + IVA • Se descuenta del registro',
+      price: 800,
+      priceLabel: 'MXN + IVA • Se descuenta del Blindaje Federal',
       features: [
         'Auditoría fonética y visual exhaustiva',
         'Búsqueda en bases IMPI reales',
         'Análisis de conflictos potenciales',
         'Reporte detallado por especialista',
       ],
-      guarantee: 'Este diagnóstico se descuenta íntegramente al contratar tu Blindaje Federal',
+      guarantee: 'Se descuenta íntegramente al contratar tu Blindaje Federal',
       cta: 'SOLICITAR DIAGNÓSTICO',
       ctaLink: `${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent('Hola, me interesa el Diagnóstico de Viabilidad de Registro de marca.')}`,
       showInvoice: false,
       badge: 'Elaborado a mano por especialistas en PI',
     },
+    {
+      tag: 'Declaración de Uso (Art. 233)',
+      price: 1999,
+      priceLabel: 'MXN + IVA • Por Marca Registrada',
+      features: [
+        'Gestión completa ante el IMPI',
+        'Revisión de documentación probatoria',
+        'Presentación dentro de plazo legal',
+        'Constancia de cumplimiento oficial',
+      ],
+      guarantee: 'Obligatoria a 3 años del registro — evita la cancelación de tu marca',
+      cta: 'DECLARAR USO',
+      ctaLink: `${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent('Hola, necesito realizar la Declaración de Uso de mi marca registrada.')}`,
+      showInvoice: false,
+      badge: null,
+    },
   ]
 
   const plan = plans[activeTab]
+  const tabLabels = ['Blindaje Completo', 'Diagnóstico', 'Declaración de Uso']
   
   return (
     <section id="inversion" className="relative py-32 overflow-hidden">
@@ -581,18 +598,34 @@ function PricingSection() {
             <div className="absolute inset-0 rounded-3xl p-px bg-gradient-to-br from-gold-400/30 via-transparent to-gold-400/10" />
             <div className="relative bg-[#0A0A0A] rounded-3xl p-10 sm:p-14 lg:p-16 text-center">
 
-              {/* Tab Switcher */}
-              <div className="flex items-center justify-center gap-4 mb-10">
+              {/* Tab Navigation */}
+              <div className="flex items-center justify-center gap-2 mb-6">
                 <motion.button
-                  onClick={() => setActiveTab(activeTab === 0 ? 1 : 0)}
-                  className="flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/10 bg-white/[0.03] hover:border-gold-400/30 transition-all text-xs tracking-[0.15em] text-white/50 hover:text-gold-400 uppercase"
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setActiveTab(activeTab === 0 ? plans.length - 1 : activeTab - 1)}
+                  className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.03] hover:border-gold-400/30 transition-all flex items-center justify-center text-white/50 hover:text-gold-400"
+                  whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                 >
-                  <svg className="w-4 h-4 rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12H19M19 12L12 5M19 12L12 19"/>
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M19 12H5M5 12L12 19M5 12L12 5"/>
                   </svg>
-                  {activeTab === 0 ? 'Ver Diagnóstico Individual' : 'Ver Blindaje Completo'}
+                </motion.button>
+
+                <div className="flex gap-1 px-4">
+                  {plans.map((_, i) => (
+                    <motion.button key={i} onClick={() => setActiveTab(i)}
+                      className={`px-3 py-1.5 rounded-full text-[10px] tracking-[0.15em] uppercase transition-all ${i === activeTab ? 'bg-gold-400/15 text-gold-400 border border-gold-400/30' : 'text-white/30 hover:text-white/50 border border-transparent'}`}
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      {tabLabels[i]}
+                    </motion.button>
+                  ))}
+                </div>
+
+                <motion.button
+                  onClick={() => setActiveTab(activeTab === plans.length - 1 ? 0 : activeTab + 1)}
+                  className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.03] hover:border-gold-400/30 transition-all flex items-center justify-center text-white/50 hover:text-gold-400"
+                  whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12H19M19 12L12 5M19 12L12 19"/>
                   </svg>
@@ -619,16 +652,18 @@ function PricingSection() {
                 >
                   <span className="text-xs tracking-[0.3em] text-white/40 uppercase">{plan.tag}</span>
                   
-                  {/* Badge for diagnostic */}
+                  {/* Badge (centered) */}
                   {plan.badge && (
-                    <motion.div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold-400/20 bg-gold-400/5"
-                      initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }}>
-                      <svg className="w-4 h-4 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M12 2L4 6V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V6L12 2Z"/>
-                        <path d="M9 12L11 14L15 10"/>
-                      </svg>
-                      <span className="text-xs text-gold-400 tracking-wide">{plan.badge}</span>
-                    </motion.div>
+                    <div className="flex justify-center mt-4">
+                      <motion.div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold-400/20 bg-gold-400/5"
+                        initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }}>
+                        <svg className="w-4 h-4 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 2L4 6V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V6L12 2Z"/>
+                          <path d="M9 12L11 14L15 10"/>
+                        </svg>
+                        <span className="text-xs text-gold-400 tracking-wide">{plan.badge}</span>
+                      </motion.div>
+                    </div>
                   )}
 
                   <div className="mt-8 mb-10">
@@ -639,7 +674,7 @@ function PricingSection() {
                     <p className="text-sm tracking-[0.2em] text-gold-400 mt-2 uppercase">{plan.priceLabel}</p>
                   </div>
                   
-                  <div className={`grid ${plan.features.length > 4 ? 'sm:grid-cols-2' : 'sm:grid-cols-2'} gap-4 max-w-lg mx-auto mb-10`}>
+                  <div className="grid sm:grid-cols-2 gap-4 max-w-lg mx-auto mb-10">
                     {plan.features.map((f, i) => (
                       <motion.div key={i} className="flex items-center gap-3 text-sm text-white/60"
                         initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 + i * 0.08 }}>
