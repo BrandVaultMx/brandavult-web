@@ -372,7 +372,7 @@ function HeroSection() {
         {/* Subheadline */}
         <FadeIn delay={0.5} className="text-center mb-12">
           <p className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto leading-relaxed font-light">
-            No registramos marcas; construimos la armadura jurídica que protege tu patrimonio contra infracciones y robo de identidad.
+            No registramos marcas; construimos la armadura jurídica que protege tu patrimonio contra infracciones y robo de identidad. Obtén un <span className="text-gold-400 font-medium">diagnóstico preliminar gratuito</span> con nuestra IA legal especializada.
           </p>
         </FadeIn>
         
@@ -387,7 +387,7 @@ function HeroSection() {
               <MagneticButton>
                 <motion.button type="submit" className="btn-premium px-8 py-4 rounded-xl text-sm whitespace-nowrap"
                   whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  DIAGNÓSTICO GRATUITO
+                  DIAGNÓSTICO IA GRATUITO
                 </motion.button>
               </MagneticButton>
             </div>
@@ -537,7 +537,39 @@ function MethodologySection() {
 // ============================================
 
 function PricingSection() {
-  const features = ['Pago de Derechos IMPI', 'Diagnóstico de Viabilidad', 'Estrategia de Clasificación', 'Título Digital Oficial']
+  const [activeTab, setActiveTab] = useState(0)
+  
+  const plans = [
+    {
+      tag: 'Honorarios Profesionales',
+      price: 5800,
+      priceLabel: 'MXN + IVA • Por Clase Internacional',
+      features: ['Pago de Derechos IMPI', 'Diagnóstico de Viabilidad', 'Estrategia de Clasificación', 'Título Digital Oficial', 'Recordatorio de Declaración de Uso a 3 años'],
+      guarantee: 'Garantía: Si no es registrable, no pagas honorarios',
+      cta: 'INICIAR PROTECCIÓN',
+      ctaLink: SOCIAL_LINKS.mercadopago,
+      showInvoice: true,
+      badge: null,
+    },
+    {
+      tag: 'Diagnóstico de Viabilidad',
+      price: 1500,
+      priceLabel: 'MXN + IVA • Se descuenta del registro',
+      features: [
+        'Auditoría fonética y visual exhaustiva',
+        'Búsqueda en bases IMPI reales',
+        'Análisis de conflictos potenciales',
+        'Reporte detallado por especialista',
+      ],
+      guarantee: 'Este diagnóstico se descuenta íntegramente al contratar tu Blindaje Federal',
+      cta: 'SOLICITAR DIAGNÓSTICO',
+      ctaLink: `${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent('Hola, me interesa el Diagnóstico de Viabilidad de Registro de marca.')}`,
+      showInvoice: false,
+      badge: 'Elaborado a mano por especialistas en PI',
+    },
+  ]
+
+  const plan = plans[activeTab]
   
   return (
     <section id="inversion" className="relative py-32 overflow-hidden">
@@ -548,42 +580,96 @@ function PricingSection() {
           <div className="relative">
             <div className="absolute inset-0 rounded-3xl p-px bg-gradient-to-br from-gold-400/30 via-transparent to-gold-400/10" />
             <div className="relative bg-[#0A0A0A] rounded-3xl p-10 sm:p-14 lg:p-16 text-center">
-              <span className="text-xs tracking-[0.3em] text-white/40 uppercase">Honorarios Profesionales</span>
-              
-              <div className="mt-8 mb-10">
-                <div className="flex items-start justify-center gap-1">
-                  <span className="text-2xl text-gold-400 font-light mt-3">$</span>
-                  <span className="font-serif text-7xl sm:text-8xl lg:text-9xl text-white"><CountUp target={5800} duration={1.5} /></span>
-                </div>
-                <p className="text-sm tracking-[0.2em] text-gold-400 mt-2 uppercase">MXN + IVA • Por Clase Internacional</p>
+
+              {/* Tab Switcher */}
+              <div className="flex items-center justify-center gap-4 mb-10">
+                <motion.button
+                  onClick={() => setActiveTab(activeTab === 0 ? 1 : 0)}
+                  className="flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/10 bg-white/[0.03] hover:border-gold-400/30 transition-all text-xs tracking-[0.15em] text-white/50 hover:text-gold-400 uppercase"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <svg className="w-4 h-4 rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19"/>
+                  </svg>
+                  {activeTab === 0 ? 'Ver Diagnóstico Individual' : 'Ver Blindaje Completo'}
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19"/>
+                  </svg>
+                </motion.button>
               </div>
-              
-              <div className="grid sm:grid-cols-2 gap-4 max-w-md mx-auto mb-10">
-                {features.map((f, i) => (
-                  <motion.div key={i} className="flex items-center gap-3 text-sm text-white/60"
-                    initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.1 }}>
-                    <Icons.Check className="w-4 h-4 text-gold-400" />{f}
-                  </motion.div>
+
+              {/* Tab Dots */}
+              <div className="flex justify-center gap-2 mb-8">
+                {plans.map((_, i) => (
+                  <motion.button key={i} onClick={() => setActiveTab(i)}
+                    className={`w-2 h-2 rounded-full transition-colors ${i === activeTab ? 'bg-gold-400' : 'bg-white/20'}`}
+                    whileHover={{ scale: 1.4 }}
+                  />
                 ))}
               </div>
-              
-              <motion.div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-emerald-500/30 bg-emerald-500/5 mb-10" whileHover={{ scale: 1.02 }}>
-                <Icons.Check className="w-5 h-5 text-emerald-400" />
-                <span className="text-sm text-emerald-400 tracking-wide uppercase font-medium">Garantía: Si no es registrable, no pagas honorarios</span>
-              </motion.div>
-              
-              <MagneticButton className="inline-block">
-                <motion.a href={SOCIAL_LINKS.mercadopago} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-10 py-5 rounded-xl btn-premium text-sm"
-                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  INICIAR PROTECCIÓN<Icons.Arrow className="w-4 h-4" />
-                </motion.a>
-              </MagneticButton>
-              
-              <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm text-white/30">
-                <a href={`${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent('Hola, requiero factura')}`} target="_blank" className="hover:text-gold-400 transition-colors link-hover">SOLICITAR FACTURA</a>
-                <a href={`${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent('Hola, deseo pagar por SPEI')}`} target="_blank" className="hover:text-gold-400 transition-colors link-hover">TRANSFERENCIA SPEI</a>
-              </div>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.35, ease: [0.25, 0.4, 0.25, 1] }}
+                >
+                  <span className="text-xs tracking-[0.3em] text-white/40 uppercase">{plan.tag}</span>
+                  
+                  {/* Badge for diagnostic */}
+                  {plan.badge && (
+                    <motion.div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold-400/20 bg-gold-400/5"
+                      initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }}>
+                      <svg className="w-4 h-4 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 2L4 6V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V6L12 2Z"/>
+                        <path d="M9 12L11 14L15 10"/>
+                      </svg>
+                      <span className="text-xs text-gold-400 tracking-wide">{plan.badge}</span>
+                    </motion.div>
+                  )}
+
+                  <div className="mt-8 mb-10">
+                    <div className="flex items-start justify-center gap-1">
+                      <span className="text-2xl text-gold-400 font-light mt-3">$</span>
+                      <span className="font-serif text-7xl sm:text-8xl lg:text-9xl text-white"><CountUp target={plan.price} duration={1.2} /></span>
+                    </div>
+                    <p className="text-sm tracking-[0.2em] text-gold-400 mt-2 uppercase">{plan.priceLabel}</p>
+                  </div>
+                  
+                  <div className={`grid ${plan.features.length > 4 ? 'sm:grid-cols-2' : 'sm:grid-cols-2'} gap-4 max-w-lg mx-auto mb-10`}>
+                    {plan.features.map((f, i) => (
+                      <motion.div key={i} className="flex items-center gap-3 text-sm text-white/60"
+                        initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 + i * 0.08 }}>
+                        <Icons.Check className="w-4 h-4 text-gold-400 flex-shrink-0" />{f}
+                      </motion.div>
+                    ))}
+                  </div>
+                  
+                  <motion.div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-emerald-500/30 bg-emerald-500/5 mb-10" whileHover={{ scale: 1.02 }}>
+                    <Icons.Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                    <span className="text-sm text-emerald-400 tracking-wide uppercase font-medium">{plan.guarantee}</span>
+                  </motion.div>
+                  
+                  <MagneticButton className="inline-block">
+                    <motion.a href={plan.ctaLink} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-3 px-10 py-5 rounded-xl btn-premium text-sm"
+                      whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                      {plan.cta}<Icons.Arrow className="w-4 h-4" />
+                    </motion.a>
+                  </MagneticButton>
+                  
+                  {plan.showInvoice && (
+                    <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm text-white/30">
+                      <a href={`${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent('Hola, requiero factura')}`} target="_blank" className="hover:text-gold-400 transition-colors link-hover">SOLICITAR FACTURA</a>
+                      <a href={`${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent('Hola, deseo pagar por SPEI')}`} target="_blank" className="hover:text-gold-400 transition-colors link-hover">TRANSFERENCIA SPEI</a>
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+
             </div>
           </div>
         </FadeIn>
