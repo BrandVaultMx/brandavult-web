@@ -741,7 +741,7 @@ function PricingSection() {
       price: 5800,
       priceLabel: 'MXN + IVA • Todo Incluido',
       features: ['Derechos Federales IMPI Incluidos', 'Diagnóstico de Viabilidad Incluido', 'Estrategia de Clasificación Niza', 'Gestión Completa ante IMPI', 'Título Digital Oficial + Recordatorio Art. 233'],
-      guarantee: 'Compromiso Verde: Si tu diagnóstico es verde (75+ pts) y el IMPI rechaza, no cobramos honorarios',
+      guarantee: 'Compromiso Vault: Si tu diagnóstico es verde (75+ pts) y el IMPI rechaza, devolvemos nuestros honorarios',
       cta: 'INICIAR PROTECCIÓN',
       ctaLink: SOCIAL_LINKS.mercadopago,
       modalKey: 'blindaje' as const,
@@ -930,12 +930,12 @@ function FAQSection() {
   const [open, setOpen] = useState<number | null>(null)
   const faqs = [
     { q: '¿Los $5,800 ya incluyen el pago al IMPI?', a: 'Sí. Los $5,800 MXN + IVA cubren todo: derechos federales del IMPI, diagnóstico de viabilidad, estrategia de clasificación Niza, gestión integral y entrega del título. No hay pagos sorpresa ni costos ocultos.' },
-    { q: '¿Qué pasa si mi marca tiene riesgo de rechazo?', a: 'Antes de registrar, hacemos un Diagnóstico de Viabilidad con un sistema de scoring de 0 a 100 puntos y semáforo. Si resulta verde (75+ pts), procedemos con nuestro Compromiso Verde: si el IMPI rechaza por una causa que debimos detectar, no cobramos honorarios. Si es amarillo o rojo, te informamos los riesgos concretos y te ofrecemos un segundo diagnóstico con marca modificada a precio preferencial de $400 MXN, o proceder bajo tu propio riesgo con consentimiento informado.' },
+    { q: '¿Qué pasa si mi marca tiene riesgo de rechazo?', a: 'Antes de registrar, hacemos un Diagnóstico de Viabilidad con un sistema de scoring de 0 a 100 puntos y semáforo. Si resulta verde (75+ pts), procedemos con nuestro Compromiso Vault: si el IMPI rechaza por una causa que debimos detectar, te devolvemos nuestros honorarios profesionales (la tarifa gubernamental no es reembolsable porque la cobra el gobierno). Si es amarillo o rojo, te informamos los riesgos concretos y te ofrecemos un segundo diagnóstico con marca modificada a precio preferencial de $400 MXN, o proceder bajo tu propio riesgo con consentimiento informado.' },
     { q: '¿Protege solo el nombre o también el logo?', a: 'Depende del tipo de solicitud. Una marca denominativa protege solo el nombre. Una marca mixta protege nombre + logo en una sola solicitud. Si solo tienes un diseño sin nombre, se registra como marca innominada. Te asesoramos sobre cuál conviene más según tu caso.' },
     { q: '¿Cuánto tarda el registro?', a: 'La resolución oficial del IMPI toma de 4 a 6 meses. Sin embargo, tu protección legal inicia desde que se presenta la solicitud — cualquier tercero que intente registrar algo similar después de esa fecha, tú tienes prioridad.' },
     { q: '¿Necesito estar dado de alta en el SAT?', a: 'No es obligatorio. Puedes registrar tu marca como persona física con tu CURP o como persona moral. No necesitas RFC con actividad empresarial para proteger tu marca.' },
     { q: '¿Qué es la Declaración de Uso y por qué importa?', a: 'El Artículo 233 de la Ley Federal de Protección a la Propiedad Industrial obliga a declarar el uso de tu marca dentro de los 3 años siguientes a su concesión. Si no la presentas, el IMPI puede cancelar tu registro. Muchos titulares no conocen esta obligación — nosotros te recordamos y gestionamos el trámite.' },
-    { q: '¿Qué es el Compromiso Verde?', a: 'Es nuestra política de garantía. Si tu diagnóstico resulta en semáforo verde (75+ puntos de 100) y decides proceder al Blindaje Federal, nos comprometemos: si el IMPI rechaza la marca por una causa que nuestro análisis debió detectar, no cobramos los honorarios profesionales. Si tu diagnóstico es amarillo o rojo, te ofrecemos un segundo estudio con marca modificada a $400 MXN (precio preferencial).' },
+    { q: '¿Qué es el Compromiso Vault?', a: 'Es nuestra política de garantía. Si tu diagnóstico resulta en semáforo verde (75+ puntos de 100) y decides proceder al Blindaje Federal, nos comprometemos: si el IMPI rechaza la marca por una causa que nuestro análisis debió detectar, te devolvemos nuestros honorarios profesionales íntegros. La tarifa gubernamental del IMPI no es reembolsable porque la cobra el gobierno, no BrandVault. Si tu diagnóstico es amarillo o rojo, te ofrecemos un segundo estudio con marca modificada a $400 MXN (precio preferencial).' },
   ]
   
   return (
