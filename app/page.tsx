@@ -553,7 +553,7 @@ function RisksSection() {
 
 function MethodologySection() {
   const steps = [
-    { n: '01', title: 'DIAGNÓSTICO', desc: 'Auditoría fonética, visual y conceptual con sistema de scoring de 100 puntos. Buscamos conflictos reales en MARCIA antes de que inviertas un peso en el registro.', Icon: Icons.Scale },
+    { n: '01', title: 'DIAGNÓSTICO', desc: 'Auditoría fonética, visual y conceptual con sistema de scoring de 100 puntos. Buscamos conflictos reales en MARCIA y MARCANET antes de que inviertas un peso en el registro.', Icon: Icons.Scale },
     { n: '02', title: 'ESTRATEGIA', desc: 'Clasificación Niza precisa para blindar tus productos y servicios. Identificamos las clases necesarias — ni más ni menos — para protección efectiva.', Icon: Icons.Document },
     { n: '03', title: 'TÍTULO OFICIAL', desc: 'Gestión integral ante el IMPI hasta la entrega de tu Título de Propiedad Intelectual. Incluye seguimiento y recordatorio de Declaración de Uso a 3 años.', Icon: Icons.Shield },
   ]
@@ -603,21 +603,21 @@ function ContactModal({ isOpen, onClose, servicio }: {
   const servicios = {
     blindaje: {
       title: 'Blindaje Federal Completo',
-      price: '$5,800 MXN + IVA',
+      price: '$5,800 MXN',
       whatsappMsg: 'Hola, quiero contratar el Blindaje Federal para mi marca',
       payLink: SOCIAL_LINKS.mercadopago,
       showPay: true,
     },
     diagnostico: {
       title: 'Diagnóstico de Viabilidad',
-      price: '$800 MXN + IVA',
+      price: '$800 MXN',
       whatsappMsg: 'Hola, quiero contratar el Diagnóstico de Viabilidad para mi marca',
       payLink: null,
       showPay: false,
     },
     declaracion: {
       title: 'Declaración de Uso',
-      price: '$1,999 MXN + IVA',
+      price: '$1,999 MXN',
       whatsappMsg: 'Hola, necesito realizar la Declaración de Uso de mi marca',
       payLink: null,
       showPay: false,
@@ -739,7 +739,7 @@ function PricingSection() {
     {
       tag: 'Blindaje Federal Completo',
       price: 5800,
-      priceLabel: 'MXN + IVA • Todo Incluido',
+      priceLabel: 'MXN IVA incluido • Todo Incluido',
       features: ['Derechos Federales IMPI Incluidos', 'Diagnóstico de Viabilidad Incluido', 'Estrategia de Clasificación Niza', 'Gestión Completa ante IMPI', 'Título Digital Oficial + Recordatorio Art. 233'],
       guarantee: 'Compromiso Vault: Si tu diagnóstico es verde (75+ pts) y el IMPI rechaza, devolvemos nuestros honorarios',
       cta: 'INICIAR PROTECCIÓN',
@@ -752,14 +752,14 @@ function PricingSection() {
     {
       tag: 'Diagnóstico de Viabilidad',
       price: 800,
-      priceLabel: 'MXN + IVA • Entrega en 48-72 hrs hábiles',
+      priceLabel: 'MXN IVA incluido • Entrega en 48-72 hrs hábiles',
       features: [
         'Auditoría fonética, visual y conceptual',
-        'Búsqueda exhaustiva en bases IMPI (MARCIA)',
+        'Búsqueda exhaustiva en bases IMPI (MARCIA y MARCANET)',
         'Análisis de conflictos con sistema de scoring',
         'Reporte profesional con semáforo de viabilidad',
       ],
-      guarantee: 'Se descuenta del Blindaje Federal si tu resultado es semáforo verde',
+      guarantee: 'Si después contratas el Blindaje Federal, te descontamos estos $800 del total',
       cta: 'SOLICITAR DIAGNÓSTICO',
       ctaLink: `${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent('Hola, me interesa el Diagnóstico de Viabilidad de Registro de marca.')}`,
       modalKey: 'diagnostico' as const,
@@ -770,7 +770,7 @@ function PricingSection() {
     {
       tag: 'Declaración de Uso (Art. 233)',
       price: 1999,
-      priceLabel: 'MXN + IVA • Por Marca Registrada',
+      priceLabel: 'MXN IVA incluido • Por Marca Registrada',
       features: [
         'Gestión completa ante el IMPI',
         'Revisión de documentación probatoria',
@@ -929,7 +929,7 @@ function PricingSection() {
 function FAQSection() {
   const [open, setOpen] = useState<number | null>(null)
   const faqs = [
-    { q: '¿Los $5,800 ya incluyen el pago al IMPI?', a: 'Sí. Los $5,800 MXN + IVA cubren todo: derechos federales del IMPI, diagnóstico de viabilidad, estrategia de clasificación Niza, gestión integral y entrega del título. No hay pagos sorpresa ni costos ocultos.' },
+    { q: '¿Los $5,800 ya incluyen el pago al IMPI?', a: 'Sí. Los $5,800 MXN cubren todo con IVA incluido: derechos federales del IMPI, diagnóstico de viabilidad, estrategia de clasificación Niza, gestión integral y entrega del título. No hay pagos sorpresa ni costos ocultos.' },
     { q: '¿Qué pasa si mi marca tiene riesgo de rechazo?', a: 'Antes de registrar, hacemos un Diagnóstico de Viabilidad con un sistema de scoring de 0 a 100 puntos y semáforo. Si resulta verde (75+ pts), procedemos con nuestro Compromiso Vault: si el IMPI rechaza por una causa que debimos detectar, te devolvemos nuestros honorarios profesionales (la tarifa gubernamental no es reembolsable porque la cobra el gobierno). Si es amarillo o rojo, te informamos los riesgos concretos y te ofrecemos un segundo diagnóstico con marca modificada a precio preferencial de $400 MXN, o proceder bajo tu propio riesgo con consentimiento informado.' },
     { q: '¿Protege solo el nombre o también el logo?', a: 'Depende del tipo de solicitud. Una marca denominativa protege solo el nombre. Una marca mixta protege nombre + logo en una sola solicitud. Si solo tienes un diseño sin nombre, se registra como marca innominada. Te asesoramos sobre cuál conviene más según tu caso.' },
     { q: '¿Cuánto tarda el registro?', a: 'La resolución oficial del IMPI toma de 4 a 6 meses. Sin embargo, tu protección legal inicia desde que se presenta la solicitud — cualquier tercero que intente registrar algo similar después de esa fecha, tú tienes prioridad.' },
