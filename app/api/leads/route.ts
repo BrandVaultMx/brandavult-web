@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+function getSupabase() {
+  if (!supabaseUrl || !supabaseKey) return null
+  return createClient(supabaseUrl, supabaseKey)
+}
 
 const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK_URL
 
@@ -12,6 +15,12 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const { nombre, email, telefono, marca, servicio, fuente } = body
+
+    const supabase = getSupabase()
+    if (!supabase) {
+      console.warn('Supabase not configured — lead not saved')
+      return NextResponse.json({ success: true, id: null })
+    }
 
     // Save to Supabase
     const { data, error } = await supabase
