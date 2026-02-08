@@ -739,8 +739,8 @@ function PricingSection() {
     {
       tag: 'Blindaje Federal Completo',
       price: 5800,
-      priceLabel: 'MXN IVA incluido • Todo Incluido',
-      features: ['Derechos Federales IMPI Incluidos', 'Diagnóstico de Viabilidad Incluido', 'Estrategia de Clasificación Niza', 'Gestión Completa ante IMPI', 'Título Digital Oficial + Recordatorio Art. 233'],
+      priceLabel: 'MXN · IVA Incluido · Todo Incluido',
+      features: ['Derechos Federales IMPI Incluidos', 'Diagnóstico de Viabilidad Incluido', 'Estrategia de Clasificación Niza', 'Gestión Completa ante IMPI', 'Título Digital Oficial + Recordatorio Declaración de Uso'],
       guarantee: 'Compromiso Vault: Si tu diagnóstico es verde (75+ pts) y el IMPI rechaza, devolvemos nuestros honorarios',
       cta: 'INICIAR PROTECCIÓN',
       ctaLink: SOCIAL_LINKS.mercadopago,
@@ -752,7 +752,7 @@ function PricingSection() {
     {
       tag: 'Diagnóstico de Viabilidad',
       price: 800,
-      priceLabel: 'MXN IVA incluido • Entrega en 48-72 hrs hábiles',
+      priceLabel: 'MXN · IVA Incluido · Entrega en 48-72 hrs hábiles',
       features: [
         'Auditoría fonética, visual y conceptual',
         'Búsqueda exhaustiva en bases IMPI (MARCIA y MARCANET)',
@@ -770,7 +770,7 @@ function PricingSection() {
     {
       tag: 'Declaración de Uso (Art. 233)',
       price: 1999,
-      priceLabel: 'MXN IVA incluido • Por Marca Registrada',
+      priceLabel: 'MXN · IVA Incluido · Por Marca Registrada',
       features: [
         'Gestión completa ante el IMPI',
         'Revisión de documentación probatoria',
